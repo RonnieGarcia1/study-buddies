@@ -19,7 +19,7 @@ const groups = require("../controllers/groupsController.js")
     }
 }
     
-    const createGroup = async(Group) => {
+    const createGroup = async(group) => {
         try{
             const newGroup = await db.one(
                 "INSERT INTO groups (name, main_focus, date_formed, contact) VALUES($1, $2, $3, $4) RETURNING *",
@@ -43,7 +43,7 @@ const groups = require("../controllers/groupsController.js")
     }
 };
 
-    const updateGroup = async(id, Group) => {
+    const updateGroup = async(id, group) => {
         try{
             const updatedGroup = await db.one(
                 "UPDATE groups SET name=$1, main_focus=$2, date_formed=$3, contact=$4 WHERE id=$5 RETURNING *;",
