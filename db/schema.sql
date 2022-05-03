@@ -17,7 +17,7 @@ CREATE TABLE groups (
 DROP TABLE IF EXISTS events;
 
 CREATE TABLE events (
-    eventid serial PRIMARY KEY,
+    eventid SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     virtual_meeting_link TEXT,
     start_time TEXT,
