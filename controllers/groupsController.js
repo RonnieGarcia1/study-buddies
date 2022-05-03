@@ -1,14 +1,19 @@
 //import express object
 const express = require("express");
-
-//renaming router
+//Rename router
 const groups = express.Router();
+//Import queries
+const { getAllGroups,
+        getOneGroup,
+        createGroup,
+        getEventsByGroupId,
+        updateGroup
+}= require("../queries/groups");
 
-//import queries
-const { getAllGroups, getOneGroup, createGroup, deleteGroup, updateGroup}= require("../queries/groups");
+//End points
+//request handlers
 
 //Get all groups
-//end point
 groups.get("/", async(req, res) => {
         const allGroups = await getAllGroups();
         if(allGroups[0]){
@@ -19,12 +24,11 @@ groups.get("/", async(req, res) => {
 
 });
 
-//request handlers
 //Get one Group
-groups.get("/:id", async (req, res) => {
-    const { id } = req.params;
+groups.get("/:gid", async (req, res) => {
+    const { gid } = req.params;
     try{
-        const group = await getOneGroup(id);
+        const group = await getOneGroup(gid);
         if(group.id){
             res.status(200).json(group)
         } else {
@@ -50,31 +54,40 @@ groups.post("/", async (req, res) => {
     }
 });
 
-//Delete Group by id
-groups.delete("/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-        const deletedGroup = await deleteGroup(id);
-        if(deletedGroup.id){
-            res.status(200).json(deletedGroup)
-        } else {
-            res.status(404).json({error: "error"})
-        }
-    }catch(err){
-        console.log(err)
-    }
-});
-
 //Update Group by id
-groups.put("/:id", async (req, res) => {
-    const { id } = req.params;
+groups.put("/:gid", async (req, res) => {
+    const { gid } = req.params;
     const { body } = req;
-    const updatedGroup = await updateGroup(id, body);
+    const updatedGroup = await updateGroup(gid, body);
     if(updatedGroup.id){
         res.status(200).json(updatedGroup);
     } else {
         res.status(404).json({error: "error"});
     }
 });
+
+//Get events by Group
+groups.get("/:gid/events", async (request, response) => {
+    const { gid } = request.params;
+    try {
+      const group = await getEventsByGroupId(gid);
+      console.log(group);
+      response.status(200).send(group);
+    } catch (error) {
+      response.status(404).send({ error: "Error" });
+    }
+  });
+  
+
+//Create new event 
+  groups.post("/:gid/events", async (request, response) => {
+    let event = request.body;
+    try {
+      const newEvent = await createEvent(event);
+      response.status(200).send(newEvent);
+    } catch (error) {
+      response.status(404).send({ error: "Error" });
+    }
+  });
 
 module.exports = groups;

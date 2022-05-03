@@ -6,21 +6,22 @@ CREATE DATABASE study_buddies;
 DROP TABLE IF EXISTS groups;
 
 CREATE TABLE groups (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
+    study_group_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL UNIQUE,
     main_focus TEXT,
-    date_formed DATETIME,
+    date_formed TIMESTAMP,
     contact_email TEXT
 );
+
 
 DROP TABLE IF EXISTS events;
 
 CREATE TABLE events (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
+    eventid serial PRIMARY KEY,
+    name TEXT NOT NULL,
     virtual_meeting_link TEXT,
-    study_group_id INTEGER,
-    start_time DATETIME,
-    end_time DATETIME,
-    study_group_id FOREIGN KEY groups(id)
+    start_time TEXT,
+    end_time TEXT,
+    number_of_attendees INT,
+    study_group_id INT REFERENCES groups(study_group_id)
 );
